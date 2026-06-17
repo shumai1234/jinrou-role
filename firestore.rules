@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isRoomHost(roomId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/rooms/$(roomId)).data.hostUid == request.auth.uid;
+    }
+
+    match /rooms/{roomId} {
+      allow create: if signedIn()
+        && request.resource.data.hostUid == request.auth.uid;
+
+      allow read: if signedIn();
+
+      allow update, delete: if signedIn()
+        && resource.data.hostUid == request.auth.uid;
+
+      match /players/{playerId} {
+        allow create: if signedIn()
+          && playerId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.role == "";
+
+        allow read: if signedIn()
+          && (playerId == request.auth.uid || isRoomHost(roomId));
+
+        allow update: if signedIn()
+          && (
+            isRoomHost(roomId)
+            || (
+              playerId == request.auth.uid
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name", "updatedAt"])
+            )
+          );
+
+        allow delete: if signedIn()
+          && (playerId == request.auth.uid || isRoomHost(roomId));
+      }
+    }
+  }
+}

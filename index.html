@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゴミ出し人狼 役職配布ソフト</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section id="welcomePage" class="page page--active welcome-page">
+      <div class="welcome-copy">
+        <p class="eyebrow">Firebase Werewolf Support</p>
+        <h1>ゴミ出し人狼</h1>
+        <p class="lead">部屋を作って、参加者それぞれのスマホに自分の役職だけ送ります。</p>
+      </div>
+
+      <div class="welcome-actions">
+        <button id="createRoomButton" class="primary-button">主催者として部屋を作る</button>
+        <button id="showJoinButton" class="secondary-button">参加者として入る</button>
+      </div>
+
+      <div id="joinBox" class="panel join-box is-hidden">
+        <label class="field stack-field">
+          <span>部屋コード</span>
+          <input id="joinRoomCodeInput" class="text-input code-input" type="text" maxlength="6" placeholder="例：A1B2C3">
+        </label>
+        <label class="field stack-field">
+          <span>名前</span>
+          <input id="joinNameInput" class="text-input" type="text" placeholder="例：太郎">
+        </label>
+        <p id="joinError" class="error-message"></p>
+        <button id="joinRoomButton" class="primary-button full-button">この部屋に入る</button>
+      </div>
+
+      <p id="firebaseStatus" class="status-message">Firebaseに接続中...</p>
+    </section>
+
+    <section id="hostPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="welcomePage">戻る</button>
+        <div>
+          <p class="eyebrow">Host</p>
+          <h2>主催者画面</h2>
+        </div>
+      </header>
+
+      <div class="panel">
+        <div class="room-code-box">
+          <span>部屋コード</span>
+          <strong id="hostRoomCode">------</strong>
+        </div>
+        <p class="summary">参加者はこのコードを入力して入室します。</p>
+      </div>
+
+      <div class="panel">
+        <div class="players-header">
+          <h3>参加者</h3>
+          <p id="playerSummary" class="summary">0人</p>
+        </div>
+        <ul id="playerList" class="player-list"></ul>
+      </div>
+
+      <div class="panel">
+        <label class="field">
+          <span>参加人数</span>
+          <input id="playerCount" type="number" min="4" max="20" value="0" readonly>
+        </label>
+
+        <div class="roles">
+          <div class="roles-header">
+            <h3>役職の人数</h3>
+            <button id="autoRolesButton" class="secondary-button">おすすめ設定</button>
+          </div>
+
+          <label class="role-row">
+            <span>人狼</span>
+            <input class="role-input" data-role="人狼" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>占い師</span>
+            <input class="role-input" data-role="占い師" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>騎士</span>
+            <input class="role-input" data-role="騎士" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>霊媒師</span>
+            <input class="role-input" data-role="霊媒師" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>狂人</span>
+            <input class="role-input" data-role="狂人" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>市民</span>
+            <input class="role-input" data-role="市民" type="number" min="0" value="0">
+          </label>
+        </div>
+
+        <p id="roleSummary" class="summary"></p>
+        <p id="setupError" class="error-message"></p>
+        <button id="assignButton" class="primary-button full-button">全員に役職を送信する</button>
+      </div>
+
+      <div class="timer-panel">
+        <div class="timer-top">
+          <div>
+            <p class="eyebrow">Discussion</p>
+            <h3>話し合いタイマー</h3>
+          </div>
+          <select id="timerPreset" aria-label="タイマー時間">
+            <option value="180">3分</option>
+            <option value="300" selected>5分</option>
+            <option value="420">7分</option>
+            <option value="600">10分</option>
+          </select>
+        </div>
+
+        <div id="timerDisplay" class="timer-display">05:00</div>
+        <div class="timer-controls">
+          <button id="timerStartButton" class="primary-button">開始</button>
+          <button id="timerPauseButton" class="secondary-button">一時停止</button>
+          <button id="timerResetButton" class="ghost-button">リセット</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="playerPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="welcomePage">戻る</button>
+        <div>
+          <p class="eyebrow">Player</p>
+          <h2>あなたの役職</h2>
+        </div>
+      </header>
+
+      <div class="panel role-receive-panel">
+        <p id="playerRoomLabel" class="summary"></p>
+        <h3 id="playerNameLabel">参加者</h3>
+        <div id="privateRole" class="private-role is-waiting">配布待ち</div>
+        <p id="playerStatus" class="summary">主催者が役職を配るまで、この画面で待ってください。</p>
+        <button id="revealRoleButton" class="primary-button full-button">役職を見る</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

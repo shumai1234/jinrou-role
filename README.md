@@ -1,1 +1,18 @@
-# jinrou-role
+# ゴミ出し人狼 役職配布ソフト
+
+Firebaseを使って、主催者が配った役職を各参加者のスマホやPCに送るWebアプリです。
+
+## Firebaseで必要な設定
+
+1. Firebase Consoleでプロジェクトを作成します。
+2. Webアプリを追加し、表示されたFirebase設定を `firebase-config.js` に貼り替えます。
+3. AuthenticationのSign-in methodで「Anonymous」を有効にします。
+4. Firestore Databaseを作成します。
+5. Firestore Rulesに `firestore.rules` の内容を貼り付けて公開します。
+6. GitHub Pagesでこのフォルダを公開します。
+
+## 使い方
+
+主催者は「部屋を作る」を押して、表示された6文字の部屋コードを参加者に共有します。
+参加者は自分のスマホやPCで同じサイトを開き、部屋コードと名前を入力して入室します。
+主催者が「全員に役職を送信する」を押すと、各参加者の画面に自分の役職だけが届きます。
