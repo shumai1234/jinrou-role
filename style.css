@@ -1,0 +1,559 @@
+:root {
+  --bg: #f4f0e8;
+  --surface: #fffaf1;
+  --ink: #202124;
+  --muted: #706b64;
+  --line: #ded4c5;
+  --accent: #c0392b;
+  --accent-dark: #8f251d;
+  --green: #2f7d5b;
+  --shadow: 0 18px 48px rgba(32, 33, 36, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background:
+    linear-gradient(135deg, rgba(192, 57, 43, 0.1), transparent 35%),
+    linear-gradient(315deg, rgba(47, 125, 91, 0.14), transparent 30%),
+    var(--bg);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app {
+  width: min(960px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page {
+  display: none;
+  min-height: calc(100vh - 48px);
+}
+
+.page--active {
+  display: block;
+}
+
+.welcome-page {
+  display: none;
+  place-content: center;
+  gap: 32px;
+  text-align: center;
+}
+
+.welcome-page.page--active {
+  display: grid;
+}
+
+.welcome-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(3rem, 12vw, 7rem);
+  line-height: 0.95;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 2rem;
+}
+
+h3 {
+  margin-bottom: 0;
+  font-size: 1.15rem;
+}
+
+.lead {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.panel,
+.timer-panel {
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 250, 241, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.field,
+.role-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.field {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+}
+
+.stack-field {
+  align-items: stretch;
+  flex-direction: column;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+input,
+select {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  color: var(--ink);
+}
+
+input {
+  width: 92px;
+  padding: 8px 12px;
+  text-align: right;
+}
+
+input[readonly] {
+  background: #f3eee5;
+  color: var(--muted);
+}
+
+select {
+  padding: 8px 12px;
+}
+
+.login-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.player-name-field {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.name-input {
+  width: min(360px, 100%);
+  text-align: left;
+}
+
+.text-input {
+  width: 100%;
+  text-align: left;
+}
+
+.code-input {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.join-box {
+  width: min(460px, 100%);
+  margin: 0 auto;
+  text-align: left;
+}
+
+.host-entry {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin-top: 18px;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.status-message {
+  min-height: 24px;
+  margin: 0;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.status-message.is-error {
+  color: var(--accent-dark);
+}
+
+.room-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.room-code-box span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.room-code-box strong {
+  font-size: clamp(2rem, 10vw, 4rem);
+  letter-spacing: 0.08em;
+}
+
+.players-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.player-list {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 54px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.player-name {
+  font-weight: 800;
+}
+
+.player-state {
+  min-width: 72px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3eee5;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.roles {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.roles-header,
+.timer-top,
+.result-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.role-row {
+  min-height: 56px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.summary {
+  min-height: 26px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.error-message {
+  min-height: 24px;
+  margin: 6px 0 0;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.primary-button {
+  background: var(--accent);
+  color: white;
+}
+
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+
+.danger-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #5b2a2a;
+  color: white;
+  font-weight: 700;
+}
+
+.secondary-button {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+}
+
+.ghost-button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.full-button {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.result-toolbar {
+  margin-bottom: 16px;
+}
+
+.role-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.role-card {
+  min-height: 136px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(32, 33, 36, 0.08);
+}
+
+.role-card__number {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.role-card__name {
+  min-height: 28px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.role-card__role {
+  min-height: 36px;
+  margin-bottom: 14px;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.role-card__role.is-hidden {
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.role-card button {
+  width: 100%;
+}
+
+.timer-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.role-receive-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.private-role {
+  min-height: 128px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #202124;
+  color: white;
+  font-size: clamp(2.2rem, 14vw, 5rem);
+  font-weight: 900;
+  text-align: center;
+}
+
+.private-role.is-waiting {
+  background: #f3eee5;
+  color: var(--muted);
+  font-size: clamp(1.6rem, 10vw, 3rem);
+}
+
+.timer-display {
+  padding: 18px;
+  border-radius: 8px;
+  background: #202124;
+  color: white;
+  font-size: clamp(3rem, 16vw, 6rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.timer-display.is-finished {
+  background: var(--accent);
+}
+
+.timer-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.choice-panel,
+.vote-options {
+  display: grid;
+  gap: 12px;
+}
+
+.choice-button {
+  min-height: 76px;
+  font-size: 1.3rem;
+}
+
+.vote-option {
+  width: 100%;
+  min-height: 56px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.vote-option.is-selected {
+  border-color: var(--accent);
+  background: #fff1ee;
+  color: var(--accent-dark);
+}
+
+@media (max-width: 560px) {
+  .app {
+    padding: 16px;
+  }
+
+  .page {
+    min-height: calc(100vh - 32px);
+  }
+
+  .page-header,
+  .roles-header,
+  .timer-top,
+  .result-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+
+  .timer-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .login-form {
+    grid-template-columns: 1fr;
+  }
+
+  .host-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-actions,
+  .room-code-box {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .field,
+  .player-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .name-input,
+  input {
+    width: 100%;
+  }
+}
