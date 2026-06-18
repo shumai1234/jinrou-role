@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゴミ出し人狼 役職配布ソフト</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section id="welcomePage" class="page page--active welcome-page">
+      <div class="welcome-copy">
+        <p class="eyebrow">Firebase Werewolf Support</p>
+        <h1>ゴミ出し人狼</h1>
+        <p class="lead">部屋を作って、参加者それぞれのスマホに自分の役職だけ送ります。</p>
+      </div>
+
+      <div class="welcome-actions">
+        <button id="createRoomButton" class="primary-button">主催者として部屋を作る</button>
+        <button id="showJoinButton" class="secondary-button">参加者として入る</button>
+      </div>
+
+      <div id="joinBox" class="panel join-box is-hidden">
+        <label class="field stack-field">
+          <span>部屋コード</span>
+          <input id="joinRoomCodeInput" class="text-input code-input" type="text" maxlength="6" placeholder="例：A1B2C3">
+        </label>
+        <label class="field stack-field">
+          <span>名前</span>
+          <input id="joinNameInput" class="text-input" type="text" placeholder="例：太郎">
+        </label>
+        <p id="joinError" class="error-message"></p>
+        <button id="joinRoomButton" class="primary-button full-button">この部屋に入る</button>
+      </div>
+
+      <p id="firebaseStatus" class="status-message">Firebaseに接続中...</p>
+    </section>
+
+    <section id="hostPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="welcomePage">戻る</button>
+        <div>
+          <p class="eyebrow">Host</p>
+          <h2>主催者画面</h2>
+        </div>
+      </header>
+
+      <div class="panel">
+        <div class="room-code-box">
+          <span>部屋コード</span>
+          <strong id="hostRoomCode">------</strong>
+        </div>
+        <p class="summary">参加者はこのコードを入力して入室します。</p>
+
+        <div class="host-entry">
+          <label class="field stack-field">
+            <span>主催者の名前</span>
+            <input id="hostNameInput" class="text-input" type="text" placeholder="例：主催者">
+          </label>
+          <button id="hostJoinButton" class="primary-button">主催者も参加する</button>
+        </div>
+        <p id="hostJoinError" class="error-message"></p>
+      </div>
+
+      <div class="panel">
+        <div class="players-header">
+          <h3>参加者</h3>
+          <p id="playerSummary" class="summary">0人</p>
+        </div>
+        <ul id="playerList" class="player-list"></ul>
+      </div>
+
+      <div id="hostOwnRolePanel" class="panel role-receive-panel is-hidden">
+        <p class="summary">主催者本人の役職</p>
+        <h3 id="hostNameLabel">主催者</h3>
+        <div id="hostPrivateRole" class="private-role is-waiting">配布待ち</div>
+        <p id="hostRoleStatus" class="summary">役職が配られるまで待ってください。</p>
+        <button id="hostRevealRoleButton" class="primary-button full-button">役職を見る</button>
+      </div>
+
+      <div class="panel">
+        <label class="field">
+          <span>参加人数</span>
+          <input id="playerCount" type="number" min="2" max="20" value="0" readonly>
+        </label>
+
+        <div class="roles">
+          <div class="roles-header">
+            <h3>役職の人数</h3>
+            <button id="autoRolesButton" class="secondary-button">おすすめ設定</button>
+          </div>
+
+          <label class="role-row">
+            <span>人狼</span>
+            <input class="role-input" data-role="人狼" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>占い師</span>
+            <input class="role-input" data-role="占い師" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>騎士</span>
+            <input class="role-input" data-role="騎士" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>霊媒師</span>
+            <input class="role-input" data-role="霊媒師" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>狂人</span>
+            <input class="role-input" data-role="狂人" type="number" min="0" value="0">
+          </label>
+          <label class="role-row">
+            <span>市民</span>
+            <input class="role-input" data-role="市民" type="number" min="0" value="0">
+          </label>
+        </div>
+
+        <p id="roleSummary" class="summary"></p>
+        <p id="setupError" class="error-message"></p>
+        <button id="assignButton" class="primary-button full-button">全員に役職を送信する</button>
+        <button id="goTimerButton" class="secondary-button full-button is-hidden">タイマーページへ進む</button>
+      </div>
+    </section>
+
+    <section id="timerPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="hostPage">戻る</button>
+        <div>
+          <p class="eyebrow">Discussion</p>
+          <h2>話し合いタイマー</h2>
+        </div>
+      </header>
+
+      <div class="timer-panel">
+        <div class="timer-top">
+          <h3>時間設定</h3>
+          <select id="timerPreset" aria-label="タイマー時間">
+            <option value="60">1分</option>
+            <option value="90">1分30秒</option>
+            <option value="120">2分</option>
+            <option value="150">2分30秒</option>
+            <option value="180">3分</option>
+            <option value="210">3分30秒</option>
+            <option value="240">4分</option>
+            <option value="270">4分30秒</option>
+            <option value="300" selected>5分</option>
+          </select>
+        </div>
+
+        <div id="timerDisplay" class="timer-display">05:00</div>
+        <div class="timer-controls">
+          <button id="timerStartButton" class="primary-button">開始</button>
+          <button id="timerPauseButton" class="secondary-button">一時停止</button>
+          <button id="timerResetButton" class="ghost-button">リセット</button>
+          <button id="timerFinishButton" class="danger-button">終了</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="missionPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="timerPage">戻る</button>
+        <div>
+          <p class="eyebrow">Mission</p>
+          <h2>ゴミ出しミッション結果</h2>
+        </div>
+      </header>
+
+      <div class="panel choice-panel">
+        <button id="missionSuccessButton" class="primary-button choice-button">成功</button>
+        <button id="missionFailureButton" class="danger-button choice-button">失敗</button>
+        <p id="missionStatus" class="summary">結果を選ぶと投票に進みます。</p>
+      </div>
+    </section>
+
+    <section id="votePage" class="page">
+      <header class="page-header">
+        <button id="backToHostButton" class="ghost-button">主催者画面へ</button>
+        <div>
+          <p class="eyebrow">Vote</p>
+          <h2>投票</h2>
+        </div>
+      </header>
+
+      <div class="panel">
+        <p id="missionResultLabel" class="summary"></p>
+        <div id="voteTimerContainer" class="timer-panel is-hidden">
+          <p id="voteTimerLabel" class="summary">投票制限時間</p>
+          <div id="voteTimerDisplay" class="timer-display">01:30</div>
+          <p id="voteCountLabel" class="summary"></p>
+        </div>
+        <h3>投票する人を選んでください</h3>
+        <div id="voteOptions" class="vote-options"></div>
+        <p id="voteStatus" class="error-message"></p>
+      </div>
+
+      <div id="voteResultsPanel" class="panel is-hidden">
+        <div class="players-header">
+          <h3>投票結果</h3>
+          <p id="voteSummary" class="summary">0票</p>
+        </div>
+        <ul id="voteResults" class="player-list"></ul>
+      </div>
+    </section>
+
+    <section id="resultsPage" class="page">
+      <div class="results-panel">
+        <h1 id="resultsTitle" class="results-title">市民の勝利</h1>
+        <p id="resultsMessage" class="results-message">ゲーム終了</p>
+        <button id="backToWelcomeButton" class="primary-button full-button">ホームに戻る</button>
+      </div>
+    </section>
+
+    <section id="playerPage" class="page">
+      <header class="page-header">
+        <button class="ghost-button" data-go-to="welcomePage">戻る</button>
+        <div>
+          <p class="eyebrow">Player</p>
+          <h2>あなたの役職</h2>
+        </div>
+      </header>
+
+      <div class="panel role-receive-panel">
+        <p id="playerRoomLabel" class="summary"></p>
+        <h3 id="playerNameLabel">参加者</h3>
+        <div id="privateRole" class="private-role is-waiting">配布待ち</div>
+        <p id="playerStatus" class="summary">主催者が役職を配るまで、この画面で待ってください。</p>
+        <button id="revealRoleButton" class="primary-button full-button">役職を見る</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
